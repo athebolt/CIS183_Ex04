@@ -11,10 +11,20 @@ public class User
 
     }
 
-    public User(String f, String l, String u)
+    public User(String u, String f, String l)
     {
+        uname = u;
         fname = f;
         lname = l;
+    }
+
+    public String getUname()
+    {
+        return uname;
+    }
+
+    public void setUname(String u)
+    {
         uname = u;
     }
 
@@ -36,15 +46,5 @@ public class User
     public void setLname(String l)
     {
         lname = l;
-    }
-
-    public String getUname()
-    {
-        return uname;
-    }
-
-    public void setUname(String u)
-    {
-        uname = u;
     }
 }

@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity
     Button btn_j_addUser;
     ListView lv_j_users;
     ArrayList<User> userList;
+    DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -26,13 +27,25 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        et_j_fname = findViewById(R.id.et_v_fName);
-        et_j_lname = findViewById(R.id.et_v_lName);
-        et_j_uname = findViewById(R.id.et_v_uName);
+        et_j_fname    = findViewById(R.id.et_v_fname);
+        et_j_lname    = findViewById(R.id.et_v_lname);
+        et_j_uname    = findViewById(R.id.et_v_uname);
         btn_j_addUser = findViewById(R.id.btn_v_addUser);
-        lv_j_users = findViewById(R.id.lv_v_users);
+        lv_j_users    = findViewById(R.id.lv_v_users);
 
         userList = new ArrayList<User>();
+
+        //make an instance of the DatabaseHelper and pass it this
+        dbHelper = new DatabaseHelper(this);
+
+        //call the initializeDB() function to fill the records into our table
+        dbHelper.initializeDB();
+
+        //test to make sure the record were inserted
+        //we should see 4 when we run this
+        Log.d("Number of records: ", dbHelper.numberOfRowsInTable() + "");
+        userList = dbHelper.getAllRows();
+        displayUsers();
 
         addNewUserButtonEvent();
     }
@@ -44,13 +57,13 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Log.d("Button pressed", "Add New User");
+                //Log.d("Button pressed", "Add New User");
 
+                String u = et_j_uname.getText().toString();
                 String f = et_j_fname.getText().toString();
                 String l = et_j_lname.getText().toString();
-                String u = et_j_uname.getText().toString();
 
-                User user = new User(f, l, u);
+                User user = new User(u, f, l);
 
                 addNewUser(user);
 
