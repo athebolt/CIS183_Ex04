@@ -23,7 +23,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         //the executes the extended class (DatabaseHelper)
 
 
-        super(context, DATABASE_NAME, null, 1);
+        super(context, DATABASE_NAME, null, 2);
     }
 
     @Override
@@ -135,4 +135,64 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         return listUsers;
     }
+
+    public void addNewUser(User u)
+    {
+        //get an instance of a writable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //This line is a little complicated the sql statement should look as follows:
+        //INSERT INTO users VALUES('zmoore','Zack','Moore')
+
+        db.execSQL("INSERT INTO " + TABLE_NAME + " VALUES('" + u.getUname() + "','" + u.getFname() + "','" + u.getLname() + "');");
+    }
+
+    @SuppressLint("Range")
+    public ArrayList<String> getAllUsernames()
+    {
+        ArrayList<String> usernames = new ArrayList<String>();
+
+        //query to get all usernames from table
+        String selectUsernames = "SELECT username FROM " + TABLE_NAME + ";";
+
+        //Get instance of a readable database and store it db
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        //execute query. Cursor will be used to cycle through results
+        Cursor cursor = db.rawQuery(selectUsernames, null);
+
+        String username;
+
+        //if there was something returned, move the cursor to the beginning of the list
+        if(cursor.moveToFirst())
+        {
+            do {
+                username = cursor.getString(cursor.getColumnIndex("username"));
+
+                usernames.add(username);
+            }
+            while (cursor.moveToNext());
+        }
+        //close database
+        db.close();
+        return usernames;
+    }
+
+    //used to delete a specific user
+    //this will be passed a username because it is our primary key
+    //you MUST delete off the primary key
+    public void deleteUser(String uName)
+    {
+        //get an instance of our database
+        //needs to be writeable
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //create our delete command
+        //DELETE FROM Users WHERE username = 'zmoore';
+        db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE username = '" + uName + "';");
+
+        //close database
+        db.close();
+    }
+
 }
