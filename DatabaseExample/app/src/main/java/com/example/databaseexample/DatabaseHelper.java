@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
         //query to get all rows and attributes from our table
         //select * means get all attributes
-        String selectQuery = "SELECT * FROM " + TABLE_NAME + ";";
+        String selectQuery = "SELECT * FROM " + TABLE_NAME + " ORDER BY username;";
 
         //get an instance of a readable database and store it in db
         SQLiteDatabase db = this.getReadableDatabase();
@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         String lname;
         String uname;
 
-        //if there was something returned move the cursor to the begining of the list
+        //if there was something returned move the cursor to the beginning of the list
         if(cursor.moveToFirst())
         {
             do
@@ -153,7 +153,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
         ArrayList<String> usernames = new ArrayList<String>();
 
         //query to get all usernames from table
-        String selectUsernames = "SELECT username FROM " + TABLE_NAME + ";";
+        String selectUsernames = "SELECT username FROM " + TABLE_NAME + " ORDER BY username;";
 
         //Get instance of a readable database and store it db
         SQLiteDatabase db = this.getReadableDatabase();
@@ -188,10 +188,23 @@ public class DatabaseHelper extends SQLiteOpenHelper
         SQLiteDatabase db = this.getWritableDatabase();
 
         //create our delete command
-        //DELETE FROM Users WHERE username = 'zmoore';
+        //DELETE FROM Users WHERE username = 'athebolt';
         db.execSQL("DELETE FROM " + TABLE_NAME + " WHERE username = '" + uName + "';");
 
         //close database
+        db.close();
+    }
+
+    public void updateUser(User u)
+    {
+        //get writeable database
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        //create out update command
+        //needs to look like this:
+        //UPDATE users SET firstname = 'Alex' , lastname = 'Thebolt' WHERE username = 'athebolt';
+        String updateCommand = "UPDATE " + TABLE_NAME + " SET firstname = '" + u.getFname() + "' , lastname = '" + u.getLname() + "' WHERE username = '" + u.getUname() + "';";
+        db.execSQL(updateCommand);
         db.close();
     }
 

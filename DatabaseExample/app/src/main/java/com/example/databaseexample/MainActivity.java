@@ -2,6 +2,7 @@ package com.example.databaseexample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity
     DatabaseHelper dbHelper;
     ArrayList<String> usernames;
     ArrayAdapter<String> adapter;
+    Intent updateIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,8 +65,11 @@ public class MainActivity extends AppCompatActivity
         //tell the listview to use the adapter
         lv_j_users.setAdapter(adapter);
 
+        updateIntent = new Intent(MainActivity.this, Update.class);
+
         addNewUserButtonEvent();
         deleteUserEvent();
+        updateUserEvent();
     }
 
     public void addNewUserButtonEvent()
@@ -128,11 +133,10 @@ public class MainActivity extends AppCompatActivity
 
     public void deleteUserEvent()
     {
-        lv_j_users.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        lv_j_users.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
-            {
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+
                 //call the delete function in our dbHelper and pass it username
                 dbHelper.deleteUser(usernames.get(i));
 
@@ -144,6 +148,21 @@ public class MainActivity extends AppCompatActivity
 
                 //update the listview to see the changes
                 adapter.notifyDataSetChanged();
+
+                return false;
+            }
+        });
+    }
+
+    public void updateUserEvent()
+    {
+        lv_j_users.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
+            {
+                updateIntent.putExtra("User", userList.get(i));
+                startActivity(updateIntent);
             }
         });
     }
