@@ -145,6 +145,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
         //INSERT INTO users VALUES('zmoore','Zack','Moore')
 
         db.execSQL("INSERT INTO " + TABLE_NAME + " VALUES('" + u.getUname() + "','" + u.getFname() + "','" + u.getLname() + "');");
+
+        db.close();
     }
 
     @SuppressLint("Range")

@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("Number of records: ", dbHelper.numberOfRowsInTable() + "");
         userList = dbHelper.getAllRows();
 
-        //for testing only
+        //for tejksting only
         //displayUsers();
 
         //get all of the usernames from our table
